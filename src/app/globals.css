@@ -1,0 +1,436 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  font-family: 'Inter', sans-serif; /* Using Inter for a clean, modern look */
+}
+
+@layer base {
+  :root {
+    /* Default Theme (Green/Terracotta) Variables */
+    --theme-default-background: 30 43% 95%;
+    --theme-default-foreground: 135 10% 20%;
+    --theme-default-card: 0 0% 100%;
+    --theme-default-card-foreground: 135 10% 20%;
+    --theme-default-popover: 0 0% 100%;
+    --theme-default-popover-foreground: 135 10% 20%;
+    --theme-default-primary: 135 30% 31%;
+    --theme-default-primary-foreground: 30 43% 95%;
+    --theme-default-secondary: 135 10% 90%;
+    --theme-default-secondary-foreground: 135 30% 31%;
+    --theme-default-muted: 135 10% 94%;
+    --theme-default-muted-foreground: 135 10% 45%;
+    --theme-default-accent: 31 67% 44%;
+    --theme-default-accent-foreground: 30 43% 95%;
+    --theme-default-destructive: 0 84.2% 60.2%;
+    --theme-default-destructive-foreground: 0 0% 98%;
+    --theme-default-border: 135 10% 88%;
+    --theme-default-input: 135 10% 88%;
+    --theme-default-ring: 31 67% 44%;
+    --theme-default-chart-1: 135 70% 50%;
+    --theme-default-chart-2: 31 70% 50%;
+    --theme-default-chart-3: 190 60% 45%;
+    --theme-default-chart-4: 45 75% 55%;
+    --theme-default-chart-5: 270 65% 60%;
+
+    /* Ocean Blue Theme Variables */
+    --theme-blue-background: 210 40% 96%; /* Light Cool Grey-Blue */
+    --theme-blue-foreground: 215 25% 25%; /* Dark Slate Blue */
+    --theme-blue-card: 0 0% 100%;
+    --theme-blue-card-foreground: 215 25% 25%;
+    --theme-blue-popover: 0 0% 100%;
+    --theme-blue-popover-foreground: 215 25% 25%;
+    --theme-blue-primary: 210 70% 50%; /* Ocean Blue */
+    --theme-blue-primary-foreground: 210 40% 98%; /* Very Light Blue */
+    --theme-blue-secondary: 210 30% 92%; /* Pale Blue */
+    --theme-blue-secondary-foreground: 210 70% 50%;
+    --theme-blue-muted: 210 30% 95%; /* Very Pale Blue */
+    --theme-blue-muted-foreground: 210 15% 50%; /* Muted Blue-Grey */
+    --theme-blue-accent: 190 60% 45%; /* Teal */
+    --theme-blue-accent-foreground: 190 40% 98%;
+    --theme-blue-destructive: 0 84.2% 60.2%; /* Keep destructive consistent */
+    --theme-blue-destructive-foreground: 0 0% 98%;
+    --theme-blue-border: 210 30% 88%; /* Light Blue Border */
+    --theme-blue-input: 210 30% 88%;
+    --theme-blue-ring: 190 60% 45%; /* Teal Ring */
+    --theme-blue-chart-1: 210 70% 50%;
+    --theme-blue-chart-2: 190 60% 45%;
+    --theme-blue-chart-3: 230 65% 60%;
+    --theme-blue-chart-4: 180 50% 40%;
+    --theme-blue-chart-5: 200 75% 55%;
+
+    /* Desert Sands Theme Variables */
+    --theme-desert-background: 35 50% 95%; /* Pale Sand */
+    --theme-desert-foreground: 30 20% 25%; /* Dark Brown */
+    --theme-desert-card: 35 30% 98%; /* Off-white Sand */
+    --theme-desert-card-foreground: 30 20% 25%;
+    --theme-desert-popover: 35 30% 98%;
+    --theme-desert-popover-foreground: 30 20% 25%;
+    --theme-desert-primary: 35 60% 55%; /* Sandy Brown */
+    --theme-desert-primary-foreground: 35 50% 98%; /* Very Pale Sand */
+    --theme-desert-secondary: 35 40% 90%; /* Light Beige */
+    --theme-desert-secondary-foreground: 35 60% 55%;
+    --theme-desert-muted: 35 40% 94%; /* Very Light Beige */
+    --theme-desert-muted-foreground: 35 15% 55%; /* Muted Brown */
+    --theme-desert-accent: 25 70% 40%; /* Burnt Orange */
+    --theme-desert-accent-foreground: 25 50% 98%;
+    --theme-desert-destructive: 0 84.2% 60.2%; /* Keep destructive consistent */
+    --theme-desert-destructive-foreground: 0 0% 98%;
+    --theme-desert-border: 35 30% 85%; /* Light Brown Border */
+    --theme-desert-input: 35 30% 85%;
+    --theme-desert-ring: 25 70% 40%; /* Burnt Orange Ring */
+    --theme-desert-chart-1: 35 60% 55%;
+    --theme-desert-chart-2: 25 70% 40%;
+    --theme-desert-chart-3: 45 75% 55%;
+    --theme-desert-chart-4: 15 50% 50%;
+    --theme-desert-chart-5: 30 65% 60%;
+
+
+    /* Default Theme Application (initial state) */
+    --background: var(--theme-default-background);
+    --foreground: var(--theme-default-foreground);
+    --card: var(--theme-default-card);
+    --card-foreground: var(--theme-default-card-foreground);
+    --popover: var(--theme-default-popover);
+    --popover-foreground: var(--theme-default-popover-foreground);
+    --primary: var(--theme-default-primary);
+    --primary-foreground: var(--theme-default-primary-foreground);
+    --secondary: var(--theme-default-secondary);
+    --secondary-foreground: var(--theme-default-secondary-foreground);
+    --muted: var(--theme-default-muted);
+    --muted-foreground: var(--theme-default-muted-foreground);
+    --accent: var(--theme-default-accent);
+    --accent-foreground: var(--theme-default-accent-foreground);
+    --destructive: var(--theme-default-destructive);
+    --destructive-foreground: var(--theme-default-destructive-foreground);
+    --border: var(--theme-default-border);
+    --input: var(--theme-default-input);
+    --ring: var(--theme-default-ring);
+    --radius: 0.5rem;
+    --chart-1: var(--theme-default-chart-1);
+    --chart-2: var(--theme-default-chart-2);
+    --chart-3: var(--theme-default-chart-3);
+    --chart-4: var(--theme-default-chart-4);
+    --chart-5: var(--theme-default-chart-5);
+
+    /* Apply Default Theme Specific Sidebar variables */
+    --sidebar-background: 135 10% 96%; /* Example */
+    --sidebar-foreground: 135 10% 20%;
+    --sidebar-primary: 135 30% 31%;
+    --sidebar-primary-foreground: 30 43% 95%;
+    --sidebar-accent: 135 10% 90%;
+    --sidebar-accent-foreground: 135 30% 31%;
+    --sidebar-border: 135 10% 88%;
+    --sidebar-ring: 31 67% 44%;
+  }
+
+  /* --- Theme Class Overrides --- */
+  .theme-default { /* Explicit class for default */
+    --background: var(--theme-default-background);
+    --foreground: var(--theme-default-foreground);
+    --card: var(--theme-default-card);
+    --card-foreground: var(--theme-default-card-foreground);
+    --popover: var(--theme-default-popover);
+    --popover-foreground: var(--theme-default-popover-foreground);
+    --primary: var(--theme-default-primary);
+    --primary-foreground: var(--theme-default-primary-foreground);
+    --secondary: var(--theme-default-secondary);
+    --secondary-foreground: var(--theme-default-secondary-foreground);
+    --muted: var(--theme-default-muted);
+    --muted-foreground: var(--theme-default-muted-foreground);
+    --accent: var(--theme-default-accent);
+    --accent-foreground: var(--theme-default-accent-foreground);
+    --destructive: var(--theme-default-destructive);
+    --destructive-foreground: var(--theme-default-destructive-foreground);
+    --border: var(--theme-default-border);
+    --input: var(--theme-default-input);
+    --ring: var(--theme-default-ring);
+    --chart-1: var(--theme-default-chart-1);
+    --chart-2: var(--theme-default-chart-2);
+    --chart-3: var(--theme-default-chart-3);
+    --chart-4: var(--theme-default-chart-4);
+    --chart-5: var(--theme-default-chart-5);
+     /* Apply Default Theme Specific Sidebar variables */
+    --sidebar-background: 135 10% 96%;
+    --sidebar-foreground: 135 10% 20%;
+    --sidebar-primary: 135 30% 31%;
+    --sidebar-primary-foreground: 30 43% 95%;
+    --sidebar-accent: 135 10% 90%;
+    --sidebar-accent-foreground: 135 30% 31%;
+    --sidebar-border: 135 10% 88%;
+    --sidebar-ring: 31 67% 44%;
+  }
+
+  .theme-blue {
+    --background: var(--theme-blue-background);
+    --foreground: var(--theme-blue-foreground);
+    --card: var(--theme-blue-card);
+    --card-foreground: var(--theme-blue-card-foreground);
+    --popover: var(--theme-blue-popover);
+    --popover-foreground: var(--theme-blue-popover-foreground);
+    --primary: var(--theme-blue-primary);
+    --primary-foreground: var(--theme-blue-primary-foreground);
+    --secondary: var(--theme-blue-secondary);
+    --secondary-foreground: var(--theme-blue-secondary-foreground);
+    --muted: var(--theme-blue-muted);
+    --muted-foreground: var(--theme-blue-muted-foreground);
+    --accent: var(--theme-blue-accent);
+    --accent-foreground: var(--theme-blue-accent-foreground);
+    --destructive: var(--theme-blue-destructive);
+    --destructive-foreground: var(--theme-blue-destructive-foreground);
+    --border: var(--theme-blue-border);
+    --input: var(--theme-blue-input);
+    --ring: var(--theme-blue-ring);
+    --chart-1: var(--theme-blue-chart-1);
+    --chart-2: var(--theme-blue-chart-2);
+    --chart-3: var(--theme-blue-chart-3);
+    --chart-4: var(--theme-blue-chart-4);
+    --chart-5: var(--theme-blue-chart-5);
+     /* Apply Blue Theme Specific Sidebar variables */
+    --sidebar-background: 210 40% 96%;
+    --sidebar-foreground: 215 25% 25%;
+    --sidebar-primary: 210 70% 50%;
+    --sidebar-primary-foreground: 210 40% 98%;
+    --sidebar-accent: 210 30% 92%;
+    --sidebar-accent-foreground: 210 70% 50%;
+    --sidebar-border: 210 30% 88%;
+    --sidebar-ring: 190 60% 45%;
+  }
+
+  .theme-desert {
+    --background: var(--theme-desert-background);
+    --foreground: var(--theme-desert-foreground);
+    --card: var(--theme-desert-card);
+    --card-foreground: var(--theme-desert-card-foreground);
+    --popover: var(--theme-desert-popover);
+    --popover-foreground: var(--theme-desert-popover-foreground);
+    --primary: var(--theme-desert-primary);
+    --primary-foreground: var(--theme-desert-primary-foreground);
+    --secondary: var(--theme-desert-secondary);
+    --secondary-foreground: var(--theme-desert-secondary-foreground);
+    --muted: var(--theme-desert-muted);
+    --muted-foreground: var(--theme-desert-muted-foreground);
+    --accent: var(--theme-desert-accent);
+    --accent-foreground: var(--theme-desert-accent-foreground);
+    --destructive: var(--theme-desert-destructive);
+    --destructive-foreground: var(--theme-desert-destructive-foreground);
+    --border: var(--theme-desert-border);
+    --input: var(--theme-desert-input);
+    --ring: var(--theme-desert-ring);
+    --chart-1: var(--theme-desert-chart-1);
+    --chart-2: var(--theme-desert-chart-2);
+    --chart-3: var(--theme-desert-chart-3);
+    --chart-4: var(--theme-desert-chart-4);
+    --chart-5: var(--theme-desert-chart-5);
+     /* Apply Desert Theme Specific Sidebar variables */
+    --sidebar-background: 35 50% 95%;
+    --sidebar-foreground: 30 20% 25%;
+    --sidebar-primary: 35 60% 55%;
+    --sidebar-primary-foreground: 35 50% 98%;
+    --sidebar-accent: 35 40% 90%;
+    --sidebar-accent-foreground: 35 60% 55%;
+    --sidebar-border: 35 30% 85%;
+    --sidebar-ring: 25 70% 40%;
+  }
+
+  /* --- Dark Mode Overrides --- */
+  .dark {
+    /* Default Dark Theme */
+    --theme-default-background: 135 5% 10%;
+    --theme-default-foreground: 30 43% 95%;
+    --theme-default-card: 135 5% 15%;
+    --theme-default-card-foreground: 30 43% 95%;
+    --theme-default-popover: 135 5% 10%;
+    --theme-default-popover-foreground: 30 43% 95%;
+    --theme-default-primary: 135 30% 60%;
+    --theme-default-primary-foreground: 135 5% 10%;
+    --theme-default-secondary: 135 5% 20%;
+    --theme-default-secondary-foreground: 30 43% 95%;
+    --theme-default-muted: 135 5% 20%;
+    --theme-default-muted-foreground: 135 10% 60%;
+    --theme-default-accent: 31 67% 55%;
+    --theme-default-accent-foreground: 135 5% 10%;
+    --theme-default-destructive: 0 62.8% 30.6%;
+    --theme-default-destructive-foreground: 0 0% 98%;
+    --theme-default-border: 135 5% 25%;
+    --theme-default-input: 135 5% 25%;
+    --theme-default-ring: 31 67% 55%;
+    --theme-default-chart-1: 135 70% 60%;
+    --theme-default-chart-2: 31 70% 60%;
+    --theme-default-chart-3: 190 60% 55%;
+    --theme-default-chart-4: 45 75% 65%;
+    --theme-default-chart-5: 270 65% 70%;
+
+    /* Ocean Blue Dark Theme */
+    --theme-blue-background: 210 15% 12%; /* Very Dark Blue */
+    --theme-blue-foreground: 210 40% 96%; /* Light Cool Grey-Blue */
+    --theme-blue-card: 210 15% 18%; /* Darker Blue */
+    --theme-blue-card-foreground: 210 40% 96%;
+    --theme-blue-popover: 210 15% 12%;
+    --theme-blue-popover-foreground: 210 40% 96%;
+    --theme-blue-primary: 210 70% 65%; /* Lighter Ocean Blue */
+    --theme-blue-primary-foreground: 210 15% 15%; /* Dark Blue for contrast */
+    --theme-blue-secondary: 210 15% 25%; /* Dark Blue-Grey */
+    --theme-blue-secondary-foreground: 210 40% 96%;
+    --theme-blue-muted: 210 15% 25%;
+    --theme-blue-muted-foreground: 210 20% 65%; /* Lighter Muted Blue */
+    --theme-blue-accent: 190 60% 55%; /* Brighter Teal */
+    --theme-blue-accent-foreground: 190 10% 15%;
+    --theme-blue-destructive: 0 62.8% 30.6%;
+    --theme-blue-destructive-foreground: 0 0% 98%;
+    --theme-blue-border: 210 15% 30%; /* Darker Blue Border */
+    --theme-blue-input: 210 15% 30%;
+    --theme-blue-ring: 190 60% 55%;
+    --theme-blue-chart-1: 210 70% 65%;
+    --theme-blue-chart-2: 190 60% 55%;
+    --theme-blue-chart-3: 230 65% 70%;
+    --theme-blue-chart-4: 180 50% 50%;
+    --theme-blue-chart-5: 200 75% 65%;
+
+    /* Desert Sands Dark Theme */
+    --theme-desert-background: 30 10% 12%; /* Very Dark Brown */
+    --theme-desert-foreground: 35 50% 95%; /* Pale Sand */
+    --theme-desert-card: 30 10% 18%; /* Darker Brown */
+    --theme-desert-card-foreground: 35 50% 95%;
+    --theme-desert-popover: 30 10% 12%;
+    --theme-desert-popover-foreground: 35 50% 95%;
+    --theme-desert-primary: 35 60% 65%; /* Lighter Sandy Brown */
+    --theme-desert-primary-foreground: 30 10% 15%;
+    --theme-desert-secondary: 30 10% 25%; /* Dark Brown-Grey */
+    --theme-desert-secondary-foreground: 35 50% 95%;
+    --theme-desert-muted: 30 10% 25%;
+    --theme-desert-muted-foreground: 35 20% 65%; /* Lighter Muted Brown */
+    --theme-desert-accent: 25 70% 50%; /* Brighter Burnt Orange */
+    --theme-desert-accent-foreground: 25 10% 15%;
+    --theme-desert-destructive: 0 62.8% 30.6%;
+    --theme-desert-destructive-foreground: 0 0% 98%;
+    --theme-desert-border: 30 10% 30%; /* Darker Brown Border */
+    --theme-desert-input: 30 10% 30%;
+    --theme-desert-ring: 25 70% 50%;
+    --theme-desert-chart-1: 35 60% 65%;
+    --theme-desert-chart-2: 25 70% 50%;
+    --theme-desert-chart-3: 45 75% 65%;
+    --theme-desert-chart-4: 15 50% 60%;
+    --theme-desert-chart-5: 30 65% 70%;
+
+    /* Apply correct theme based on body class */
+    &.theme-default {
+      --background: var(--theme-default-background);
+      --foreground: var(--theme-default-foreground);
+      --card: var(--theme-default-card);
+      --card-foreground: var(--theme-default-card-foreground);
+      --popover: var(--theme-default-popover);
+      --popover-foreground: var(--theme-default-popover-foreground);
+      --primary: var(--theme-default-primary);
+      --primary-foreground: var(--theme-default-primary-foreground);
+      --secondary: var(--theme-default-secondary);
+      --secondary-foreground: var(--theme-default-secondary-foreground);
+      --muted: var(--theme-default-muted);
+      --muted-foreground: var(--theme-default-muted-foreground);
+      --accent: var(--theme-default-accent);
+      --accent-foreground: var(--theme-default-accent-foreground);
+      --destructive: var(--theme-default-destructive);
+      --destructive-foreground: var(--theme-default-destructive-foreground);
+      --border: var(--theme-default-border);
+      --input: var(--theme-default-input);
+      --ring: var(--theme-default-ring);
+      --chart-1: var(--theme-default-chart-1);
+      --chart-2: var(--theme-default-chart-2);
+      --chart-3: var(--theme-default-chart-3);
+      --chart-4: var(--theme-default-chart-4);
+      --chart-5: var(--theme-default-chart-5);
+       /* Apply Default Dark Theme Specific Sidebar variables */
+        --sidebar-background: 135 5% 10%;
+        --sidebar-foreground: 30 43% 95%;
+        --sidebar-primary: 135 30% 60%;
+        --sidebar-primary-foreground: 135 5% 10%;
+        --sidebar-accent: 135 5% 20%;
+        --sidebar-accent-foreground: 30 43% 95%;
+        --sidebar-border: 135 5% 25%;
+        --sidebar-ring: 31 67% 55%;
+    }
+    &.theme-blue {
+      --background: var(--theme-blue-background);
+      --foreground: var(--theme-blue-foreground);
+      --card: var(--theme-blue-card);
+      --card-foreground: var(--theme-blue-card-foreground);
+      --popover: var(--theme-blue-popover);
+      --popover-foreground: var(--theme-blue-popover-foreground);
+      --primary: var(--theme-blue-primary);
+      --primary-foreground: var(--theme-blue-primary-foreground);
+      --secondary: var(--theme-blue-secondary);
+      --secondary-foreground: var(--theme-blue-secondary-foreground);
+      --muted: var(--theme-blue-muted);
+      --muted-foreground: var(--theme-blue-muted-foreground);
+      --accent: var(--theme-blue-accent);
+      --accent-foreground: var(--theme-blue-accent-foreground);
+      --destructive: var(--theme-blue-destructive);
+      --destructive-foreground: var(--theme-blue-destructive-foreground);
+      --border: var(--theme-blue-border);
+      --input: var(--theme-blue-input);
+      --ring: var(--theme-blue-ring);
+      --chart-1: var(--theme-blue-chart-1);
+      --chart-2: var(--theme-blue-chart-2);
+      --chart-3: var(--theme-blue-chart-3);
+      --chart-4: var(--theme-blue-chart-4);
+      --chart-5: var(--theme-blue-chart-5);
+       /* Apply Blue Dark Theme Specific Sidebar variables */
+        --sidebar-background: 210 15% 12%;
+        --sidebar-foreground: 210 40% 96%;
+        --sidebar-primary: 210 70% 65%;
+        --sidebar-primary-foreground: 210 15% 15%;
+        --sidebar-accent: 210 15% 25%;
+        --sidebar-accent-foreground: 210 40% 96%;
+        --sidebar-border: 210 15% 30%;
+        --sidebar-ring: 190 60% 55%;
+    }
+    &.theme-desert {
+      --background: var(--theme-desert-background);
+      --foreground: var(--theme-desert-foreground);
+      --card: var(--theme-desert-card);
+      --card-foreground: var(--theme-desert-card-foreground);
+      --popover: var(--theme-desert-popover);
+      --popover-foreground: var(--theme-desert-popover-foreground);
+      --primary: var(--theme-desert-primary);
+      --primary-foreground: var(--theme-desert-primary-foreground);
+      --secondary: var(--theme-desert-secondary);
+      --secondary-foreground: var(--theme-desert-secondary-foreground);
+      --muted: var(--theme-desert-muted);
+      --muted-foreground: var(--theme-desert-muted-foreground);
+      --accent: var(--theme-desert-accent);
+      --accent-foreground: var(--theme-desert-accent-foreground);
+      --destructive: var(--theme-desert-destructive);
+      --destructive-foreground: var(--theme-desert-destructive-foreground);
+      --border: var(--theme-desert-border);
+      --input: var(--theme-desert-input);
+      --ring: var(--theme-desert-ring);
+      --chart-1: var(--theme-desert-chart-1);
+      --chart-2: var(--theme-desert-chart-2);
+      --chart-3: var(--theme-desert-chart-3);
+      --chart-4: var(--theme-desert-chart-4);
+      --chart-5: var(--theme-desert-chart-5);
+       /* Apply Desert Dark Theme Specific Sidebar variables */
+        --sidebar-background: 30 10% 12%;
+        --sidebar-foreground: 35 50% 95%;
+        --sidebar-primary: 35 60% 65%;
+        --sidebar-primary-foreground: 30 10% 15%;
+        --sidebar-accent: 30 10% 25%;
+        --sidebar-accent-foreground: 35 50% 95%;
+        --sidebar-border: 30 10% 30%;
+        --sidebar-ring: 25 70% 50%;
+    }
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    @apply transition-colors duration-300 ease-in-out; /* Added for smooth theme transition */
+  }
+}
