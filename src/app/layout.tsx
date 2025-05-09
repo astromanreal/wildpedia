@@ -41,6 +41,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
+        <meta name="google-site-verification" content="mac7aLjz9hgBPOeatEJp8fZ6RL2GRi8PeWQfgcITzFU" />
          {/* Keep metadata definitions minimal here or move to page.tsx */}
          <title>Wildpedia</title>
          <meta name="description" content="A comprehensive digital encyclopedia of all animals living on Earth." />
