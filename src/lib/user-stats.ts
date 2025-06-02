@@ -1,8 +1,10 @@
+
 /**
  * @fileOverview Utility functions for managing user game statistics in localStorage.
  */
 
 import type { UserProfile } from '@/types/user-profile'; // Assuming UserProfile type is moved to a shared location
+import { generateRandomUsername } from './username-generator'; // For potential full reset
 
 const LOCAL_STORAGE_KEY = 'wildpediaUserProfile';
 
@@ -31,7 +33,7 @@ export function getUserProfile(): UserProfile {
   if (typeof window === 'undefined') {
     // Default structure for SSR or initial load before hydration
     return {
-      username: '...',
+      username: '...', // Placeholder for username
       avatarSeed: 'default',
       stats: { totalScore: 0, gamesPlayed: 0, achievements: [] },
     };
@@ -48,6 +50,13 @@ export function getUserProfile(): UserProfile {
        if (!Array.isArray(parsed.stats.achievements)) {
         parsed.stats.achievements = [];
        }
+       // Ensure username and avatarSeed exist
+      if (!parsed.username) {
+        parsed.username = generateRandomUsername(); // Generate if missing
+      }
+      if (!parsed.avatarSeed) {
+        parsed.avatarSeed = Math.random().toString(36).substring(7); // Generate if missing
+      }
       return parsed as UserProfile;
     } catch (e) {
       console.error("Failed to parse stored profile, resetting.", e);
@@ -56,7 +65,7 @@ export function getUserProfile(): UserProfile {
   }
   // Return a default profile structure if nothing is stored or parsing failed
    const defaultProfile: UserProfile = {
-    username: 'WildlifeWatcher', // Default generated name
+    username: generateRandomUsername(), // Default generated name
     avatarSeed: Math.random().toString(36).substring(7), // Default seed
     stats: { totalScore: 0, gamesPlayed: 0, achievements: [] },
   };
@@ -102,6 +111,25 @@ export function updateUserStats({ scoreChange = 0, incrementGamesPlayed = false 
 
   saveUserProfile(profile); // Save updated profile
 }
+
+/**
+ * Resets the user's game stats (score, games played, achievements) to default values.
+ * Username and avatar seed remain unchanged.
+ * IMPORTANT: Call only on the client-side.
+ */
+export function resetUserStats() {
+  if (typeof window === 'undefined') return;
+
+  const profile = getUserProfile(); // Get current profile
+  profile.stats = {
+    totalScore: 0,
+    gamesPlayed: 0,
+    achievements: [], // Clear achievements
+  };
+  saveUserProfile(profile); // Save updated profile with reset stats
+  console.log('User game stats have been reset.');
+}
+
 
 /**
  * Calculates the user's current level and progress towards the next level.

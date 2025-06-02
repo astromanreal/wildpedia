@@ -1,0 +1,63 @@
+
+[
+  {
+    "id": 1,
+    "name": "African Elephant",
+    "scientificName": "Loxodonta africana",
+    "type": "Mammal",
+    "habitat": "Savannas, forests, deserts, and marshes across Africa",
+    "diet": "Herbivore",
+    "lifespan": "60–70 years",
+    "conservationStatus": "Vulnerable",
+    "description": "The African elephant is the largest land animal on Earth. It is known for its large ears that help regulate body temperature.",
+    "image": "https://placehold.co/300x200.png?text=African+Elephant"
+  },
+  {
+    "id": 2,
+    "name": "Tiger",
+    "scientificName": "Panthera tigris",
+    "type": "Mammal",
+    "habitat": "Tropical forests, grasslands, and mangroves across Asia",
+    "diet": "Carnivore",
+    "lifespan": "10–15 years in the wild",
+    "conservationStatus": "Endangered",
+    "description": "Tigers are the largest of the big cats, known for their striking orange coat with black stripes.",
+    "image": "https://placehold.co/300x200.png?text=Tiger"
+  },
+  {
+    "id": 3,
+    "name": "Blue Whale",
+    "scientificName": "Balaenoptera musculus",
+    "type": "Marine Mammal",
+    "habitat": "Oceans worldwide",
+    "diet": "Carnivore (krill)",
+    "lifespan": "80–90 years",
+    "conservationStatus": "Endangered",
+    "description": "The blue whale is the largest animal ever known to have existed. It feeds primarily on tiny krill and can reach up to 100 feet in length.",
+    "image": "https://placehold.co/300x200.png?text=Blue+Whale"
+  },
+  {
+    "id": 4,
+    "name": "Koala",
+    "scientificName": "Phascolarctos cinereus",
+    "type": "Mammal",
+    "habitat": "Eucalyptus forests of eastern Australia",
+    "diet": "Herbivore (eucalyptus leaves)",
+    "lifespan": "13–18 years",
+    "conservationStatus": "Vulnerable",
+    "description": "Koalas are marsupials known for their tree-dwelling lifestyle and diet of eucalyptus leaves.",
+    "image": "https://placehold.co/300x200.png?text=Koala"
+  },
+  {
+    "id": 5,
+    "name": "Snow Leopard",
+    "scientificName": "Panthera uncia",
+    "type": "Mammal",
+    "habitat": "Mountain ranges of Central and South Asia",
+    "diet": "Carnivore",
+    "lifespan": "10–12 years in the wild",
+    "conservationStatus": "Vulnerable",
+    "description": "Snow leopards are elusive big cats adapted to cold mountain environments, with thick fur and long tails.",
+    "image": "https://placehold.co/300x200.png?text=Snow+Leopard"
+  }
+]

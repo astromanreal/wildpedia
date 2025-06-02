@@ -11,8 +11,8 @@ export default function AnimalSuggestionCard({ animalName }: AnimalSuggestionCar
   // Convert name to a URL-friendly slug (simple version)
   const slug = animalName.toLowerCase().replace(/\s+/g, '-');
 
-  // Placeholder image - In a real app, you might fetch an image based on the name
-  const placeholderImage = `https://picsum.photos/seed/${slug}/200/150`;
+  // Use placehold.co for more descriptive placeholders
+  const placeholderImage = `https://placehold.co/200x150.png?text=${encodeURIComponent(animalName)}`;
 
   return (
     <Link href={`/animal/${slug}`} passHref>

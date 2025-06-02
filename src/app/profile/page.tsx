@@ -1,11 +1,13 @@
-'use client'; // Required for useEffect, useState, localStorage access
 
+'use client';
+
+import type { Metadata } from 'next'; // Useful for client components if pre-rendered
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Trophy, Gamepad2, Star, Medal, ArrowLeft, User as UserIcon, Edit, CheckCircle } from 'lucide-react'; // Use UserIcon, added Edit, CheckCircle
+import { Trophy, Gamepad2, Star, Medal, ArrowLeft, User as UserIcon, Edit, CheckCircle, Award } from 'lucide-react';
 import { Progress } from '@/components/ui/progress';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
@@ -21,21 +23,39 @@ import {
   DialogClose,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { getUserProfile, saveUserProfile, calculateLevelInfo, getUserAchievements, type Achievement } from '@/lib/user-stats'; // Import stats utilities
-import type { UserProfile } from '@/types/user-profile'; // Import shared UserProfile type
+import { getUserProfile, saveUserProfile, calculateLevelInfo, getUserAchievements, type Achievement } from '@/lib/user-stats';
+import type { UserProfile } from '@/types/user-profile';
 
-// Import specific achievement icons if needed, or use placeholders
-import { Award } from 'lucide-react'; // Example icon
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://wildpedia.app';
 
-// Map achievement IDs to icons (example)
+// For client components, metadata is typically handled by setting document.title
+// or using a dynamic metadata solution if parts are server-rendered.
+// This static object can serve as a base or for initial load.
+export const staticProfileMetadata: Metadata = { // Renamed as it's a client page
+  title: 'Your Wildlife Profile - Stats & Achievements',
+  description: 'View your personal wildlife exploration profile on Wildpedia. Track your game scores, earned achievements, and progress through different levels.',
+  keywords: ['user profile', 'wildlife stats', 'game achievements', 'player progress', 'my wildpedia'],
+  robots: { index: false, follow: false }, // Typically, profile pages are not indexed
+  openGraph: {
+    title: 'My Wildlife Profile | Wildpedia',
+    description: 'Track your stats and achievements on Wildpedia.',
+    url: `${SITE_URL}/profile`,
+    images: [{ url: `${SITE_URL}/og-profile.png`, alt: 'Wildpedia User Profile' }], // Create public/og-profile.png
+  },
+  twitter: {
+    card: 'summary',
+    title: 'My Wildlife Profile | Wildpedia',
+    description: 'Track your stats and achievements on Wildpedia.',
+  },
+};
+
 const achievementIcons: Record<string, React.ElementType> = {
     'quiz_master_1': Star,
     'habitat_hero_1': Medal,
     'conservation_champ_1': Trophy,
-    'migration_master_1': Gamepad2, // Example
+    'migration_master_1': Gamepad2,
     'expert_scorer': Award,
-    // Add mappings for other achievement IDs as needed
-    default: Star, // Fallback icon
+    default: Star,
 };
 
 
@@ -46,15 +66,20 @@ export default function ProfilePage() {
   const [levelInfo, setLevelInfo] = useState({ currentLevel: 'Beginner', levelProgress: 0, nextLevelName: 'Explorer' });
   const [achievements, setAchievements] = useState<Achievement[]>([]);
 
-  // Load profile and stats from localStorage on mount (client-side)
   useEffect(() => {
+    // Set document title once profile is loaded
+    if (userProfile) {
+      document.title = `${userProfile.username}'s Profile | Wildpedia`;
+    } else {
+      document.title = staticProfileMetadata.title as string;
+    }
+
     const profile = getUserProfile();
     setUserProfile(profile);
     setLevelInfo(calculateLevelInfo(profile.stats.totalScore));
-    setAchievements(profile.stats.achievements || []); // Load achievements
-  }, []);
+    setAchievements(profile.stats.achievements || []);
+  }, [userProfile?.username]); // Re-run if username changes for title update
 
-  // Function to refresh profile data displayed (e.g., after saving username)
   const refreshProfileData = () => {
      const profile = getUserProfile();
      setUserProfile(profile);
@@ -72,9 +97,9 @@ export default function ProfilePage() {
   const handleSaveUsername = () => {
     if (userProfile && editableUsername.trim()) {
       const updatedProfile: UserProfile = { ...userProfile, username: editableUsername.trim() };
-      saveUserProfile(updatedProfile); // Save updated profile to localStorage
-      refreshProfileData(); // Refresh displayed data
-      setIsEditing(false); // Close dialog
+      saveUserProfile(updatedProfile);
+      refreshProfileData();
+      setIsEditing(false);
     }
   };
 
@@ -85,14 +110,37 @@ export default function ProfilePage() {
       </div>
     );
   }
+  
+  const profileJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "ProfilePage",
+    "name": `${userProfile.username}'s Profile`,
+    "description": `Wildlife exploration stats and achievements for ${userProfile.username}.`,
+    "url": `${SITE_URL}/profile`,
+    "mainEntity": {
+        "@type": "Person",
+        "name": userProfile.username,
+        // "image": `https://picsum.photos/seed/${userProfile.avatarSeed}/100/100`, // If avatar is public
+        "description": `A Wildpedia user at Level: ${levelInfo.currentLevel}.`
+    },
+    "publisher": {
+        "@type": "Organization",
+        "name": "Wildpedia"
+    }
+  };
+
 
   const avatarUrl = `https://picsum.photos/seed/${userProfile.avatarSeed}/100/100`;
   const nextLevelText = levelInfo.nextLevelName ? `(to ${levelInfo.nextLevelName})` : '(Max Level)';
 
   return (
     <div className="container mx-auto py-12 px-4">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(profileJsonLd) }}
+      />
       <Link href="/" className="text-sm text-muted-foreground hover:text-primary mb-6 inline-flex items-center gap-1">
-        <ArrowLeft className="h-4 w-4" /> Back to Explore
+        <ArrowLeft className="h-4 w-4" /> Back to Home
       </Link>
 
       <Card className="max-w-4xl mx-auto bg-card shadow-lg overflow-hidden border-primary/10">
@@ -109,7 +157,6 @@ export default function ProfilePage() {
               Wildlife Enthusiast - Level: {levelInfo.currentLevel}
             </CardDescription>
           </div>
-          {/* Edit Profile Dialog Trigger */}
           <Dialog open={isEditing} onOpenChange={setIsEditing}>
             <DialogTrigger asChild>
               <Button variant="outline" size="icon" onClick={handleEditOpen} className="mt-4 sm:mt-0 sm:ml-auto shrink-0">
@@ -134,7 +181,7 @@ export default function ProfilePage() {
                     value={editableUsername}
                     onChange={(e) => setEditableUsername(e.target.value)}
                     className="col-span-3"
-                    maxLength={20} // Optional: Limit username length
+                    maxLength={20}
                   />
                 </div>
               </div>
@@ -142,7 +189,6 @@ export default function ProfilePage() {
                  <DialogClose asChild>
                     <Button type="button" variant="secondary">Cancel</Button>
                  </DialogClose>
-                 {/* Close dialog on save */}
                  <DialogClose asChild>
                     <Button type="button" onClick={handleSaveUsername} disabled={!editableUsername.trim()}>Save changes</Button>
                  </DialogClose>
@@ -152,10 +198,8 @@ export default function ProfilePage() {
         </CardHeader>
 
         <CardContent className="p-6 grid grid-cols-1 md:grid-cols-3 gap-8">
-          {/* Stats Section */}
           <div className="md:col-span-1 space-y-6">
             <h3 className="text-xl font-semibold text-primary border-b pb-2">Stats</h3>
-            {/* Display real stats */}
             <StatItem icon={Trophy} label="Total Score" value={userProfile.stats.totalScore.toLocaleString()} />
             <StatItem icon={Gamepad2} label="Games Played" value={userProfile.stats.gamesPlayed.toString()} />
              <div>
@@ -165,12 +209,10 @@ export default function ProfilePage() {
              </div>
           </div>
 
-          {/* Achievements Section */}
           <div className="md:col-span-2 space-y-4">
             <h3 className="text-xl font-semibold text-primary border-b pb-2">Achievements</h3>
             {achievements.length > 0 ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {/* Display earned achievements */}
                 {achievements.filter(ach => ach.achieved).map((ach) => {
                    const IconComponent = achievementIcons[ach.id] || achievementIcons.default;
                   return (
@@ -200,7 +242,6 @@ export default function ProfilePage() {
   );
 }
 
-// Helper component for displaying stat items
 interface StatItemProps {
   icon: React.ElementType;
   label: string;
@@ -218,3 +259,5 @@ function StatItem({ icon: Icon, label, value }: StatItemProps) {
     </div>
   );
 }
+
+    

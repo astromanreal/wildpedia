@@ -1,21 +1,78 @@
+
+import type { Metadata, ResolvingMetadata } from 'next';
 import { conservationZonesData, type ConservationZone } from '@/data/conservation-zones-data';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { ArrowLeft, MapPin, Mountain, PawPrint, CalendarDays, ListChecks, Award, Globe } from 'lucide-react'; // Replaced Mountains with Mountain
+import { ArrowLeft, MapPin, Mountain, PawPrint, CalendarDays, ListChecks, Award, Globe } from 'lucide-react';
 
-// Server-side function to get zone data (simulated)
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://wildpedia.app';
+
 async function getZoneInfo(zoneId: string): Promise<ConservationZone | null> {
-  // Simulate fetching data
+  // Simulate async fetch if needed, for now direct find
   await new Promise(resolve => setTimeout(resolve, 50));
   const zone = conservationZonesData.find(z => z.id === zoneId);
   return zone || null;
 }
 
+export async function generateMetadata(
+  { params }: { params: { zoneId: string } },
+  parent: ResolvingMetadata
+): Promise<Metadata> {
+  const zoneId = params.zoneId.toLowerCase();
+  const zoneInfo = await getZoneInfo(zoneId);
+
+  if (!zoneInfo) {
+    return {
+      title: 'Conservation Zone Not Found',
+      description: 'The requested conservation zone could not be found on Wildpedia.',
+      robots: { index: false },
+    };
+  }
+
+  const pageTitle = `${zoneInfo.name} - ${zoneInfo.category} | Wildpedia`;
+  const pageDescription = `Explore ${zoneInfo.name}, a ${zoneInfo.category} located in ${zoneInfo.location}. Discover its key species such as ${zoneInfo.keySpecies.slice(0,2).join(', ')}, area (${zoneInfo.area}), and significance. ${zoneInfo.significance.substring(0,120).replace(/\s+/g, ' ').trim()}...`;
+  const imageUrl = zoneInfo.image?.startsWith('http') ? zoneInfo.image : `${SITE_URL}/placehold.co/500x350.png?text=${encodeURIComponent(zoneInfo.name)}`;
+
+  return {
+    title: pageTitle,
+    description: pageDescription,
+    keywords: [zoneInfo.name, zoneInfo.category, zoneInfo.location, 'conservation', 'wildlife sanctuary', 'national park', ...zoneInfo.keySpecies.slice(0,3)],
+    openGraph: {
+      title: pageTitle,
+      description: pageDescription,
+      url: `${SITE_URL}/conservation-zones/${zoneId}`,
+      type: 'article',
+      images: [
+        {
+          url: imageUrl,
+          width: 500,
+          height: 350,
+          alt: `Image of ${zoneInfo.name}`,
+        },
+      ],
+       article: {
+        publishedTime: new Date().toISOString(), // Placeholder
+        authors: [`${SITE_URL}/about`],
+        section: "Conservation Zones",
+        tags: [zoneInfo.name, zoneInfo.category, zoneInfo.location],
+      }
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: pageTitle,
+      description: pageDescription,
+      images: [imageUrl],
+    },
+  };
+}
+
+
 export default async function ZoneDetailPage({ params }: { params: { zoneId: string } }) {
   const zoneId = params.zoneId;
   const zoneInfo = await getZoneInfo(zoneId);
+  let zoneJsonLd: object | null = null;
 
   if (!zoneInfo) {
     return (
@@ -30,14 +87,38 @@ export default async function ZoneDetailPage({ params }: { params: { zoneId: str
     );
   }
 
+  zoneJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Place", // Could also be TouristAttraction
+    "name": zoneInfo.name,
+    "description": zoneInfo.significance,
+    "image": zoneInfo.image || `${SITE_URL}/og-default.png`,
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": zoneInfo.location.split(',')[0]?.trim(),
+      "addressCountry": zoneInfo.location.split(',').pop()?.trim() // Attempt to get country
+    },
+    // "geo": { "@type": "GeoCoordinates", "latitude": "0", "longitude": "0" }, // Add real coords if available
+    "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": `${SITE_URL}/conservation-zones/${zoneId}`
+    },
+    "keywords": [zoneInfo.name, zoneInfo.category, zoneInfo.location, "conservation"].join(", ")
+  };
+
   return (
     <div className="container mx-auto py-12 px-4">
+      {zoneJsonLd && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(zoneJsonLd) }}
+        />
+      )}
       <Link href="/conservation-zones" className="text-sm text-muted-foreground hover:text-primary mb-6 inline-flex items-center gap-1">
         <ArrowLeft className="h-4 w-4" /> Back to Conservation Zones List
       </Link>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* Left Column: Image & Basic Info */}
         <div className="lg:col-span-1 space-y-6">
           <Card className="overflow-hidden shadow-lg bg-card">
             <Image
@@ -46,7 +127,7 @@ export default async function ZoneDetailPage({ params }: { params: { zoneId: str
               width={500}
               height={350}
               className="w-full h-64 object-cover"
-              data-ai-hint={zoneInfo.dataAiHint}
+              data-ai-hint={zoneInfo.dataAiHint || `${zoneInfo.category.toLowerCase()} ${zoneInfo.location.toLowerCase()}`}
               priority
             />
             <CardHeader>
@@ -58,7 +139,7 @@ export default async function ZoneDetailPage({ params }: { params: { zoneId: str
                  <MapPin size={16}/> {zoneInfo.location}
               </CardDescription>
                <CardDescription className="text-md text-muted-foreground flex items-center gap-2 pt-1">
-                 <Mountain size={16}/> Area: {zoneInfo.area} {/* Used Mountain icon */}
+                 <Mountain size={16}/> Area: {zoneInfo.area}
               </CardDescription>
             </CardHeader>
              <CardContent>
@@ -78,7 +159,6 @@ export default async function ZoneDetailPage({ params }: { params: { zoneId: str
 
         </div>
 
-        {/* Right Column: Species & Rules */}
         <div className="lg:col-span-2 space-y-6">
           <Card className="bg-card">
             <CardHeader>
@@ -89,7 +169,11 @@ export default async function ZoneDetailPage({ params }: { params: { zoneId: str
               {zoneInfo.keySpecies.length > 0 ? (
                 <div className="flex flex-wrap gap-2">
                   {zoneInfo.keySpecies.map((species, index) => (
-                    <Badge key={index} variant="outline">{species}</Badge>
+                     <Link key={index} href={`/animal/${species.toLowerCase().replace(/\s+/g, '-')}`} passHref>
+                        <Badge variant="outline" className="cursor-pointer hover:bg-accent hover:text-accent-foreground transition-colors">
+                          {species}
+                        </Badge>
+                     </Link>
                   ))}
                 </div>
               ) : (
@@ -115,28 +199,8 @@ export default async function ZoneDetailPage({ params }: { params: { zoneId: str
               )}
             </CardContent>
           </Card>
-
-          {/* Optional: Placeholder for interactive map for this specific zone */}
-           {/* <Card className="bg-card">
-             <CardHeader>
-                <CardTitle className="text-xl flex items-center gap-2 text-primary"><Map size={20}/> Zone Map</CardTitle>
-             </CardHeader>
-             <CardContent>
-                <div className="h-64 bg-muted flex items-center justify-center text-muted-foreground italic rounded-md border">
-                    Detailed map coming soon...
-                </div>
-             </CardContent>
-           </Card> */}
-
         </div>
       </div>
     </div>
   );
 }
-
-// Optional: Generate static paths if you know all the zone IDs upfront
-// export async function generateStaticParams() {
-//   return conservationZonesData.map((zone) => ({
-//     zoneId: zone.id,
-//   }));
-// }

@@ -1,121 +1,152 @@
-'use client'; // Keep as client component for potential future filtering/sorting
 
-import { useParams } from 'next/navigation';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { PawPrint, Loader2 } from 'lucide-react';
-import Image from 'next/image';
-import Link from 'next/link';
-import { useEffect, useState } from 'react'; // Import useEffect and useState
+import type { Metadata } from 'next';
+import CategoryView from './category-view'; // Import the new client component
+import { continentData } from '@/data/continent-data'; // To list in JSON-LD
+import { subregionData } from '@/data/subregion-data'; // To list in JSON-LD
 
-// --- Mock Animal Data ---
-// Define different lists for different categories for demonstration
-// In a real app, this data would come from an API or database based on the category
-const allAnimals = [
-  { id: 'lion', name: 'Lion', description: 'Majestic feline of Africa.', image: 'https://cdn.pixabay.com/photo/2020/05/15/15/13/baby-lion-5173894_1280.jpg', dataAiHint: 'lion savanna', category: 'habitat' },
-  { id: 'penguin', name: 'Penguin', description: 'Flightless bird of the Southern Hemisphere.', image: 'https://cdn.pixabay.com/photo/2014/08/27/12/58/emperor-penguins-429128_1280.jpg', dataAiHint: 'penguin arctic ice', category: 'region' },
-  { id: 'elephant', name: 'Elephant', description: 'Largest land mammal.', image: 'https://cdn.pixabay.com/photo/2017/12/03/17/23/fantasy-2995326_1280.jpg', dataAiHint: 'elephant africa safari', category: 'type' },
-  { id: 'dolphin', name: 'Dolphin', description: 'Intelligent marine mammal.', image: 'https://cdn.pixabay.com/photo/2017/01/12/15/41/dolphin-1974975_1280.jpg', dataAiHint: 'dolphin ocean water', category: 'habitat' },
-  { id: 'eagle', name: 'Eagle', description: 'Large bird of prey.', image: 'https://cdn.pixabay.com/photo/2021/04/20/17/05/adler-6194438_1280.jpg', dataAiHint: 'eagle mountain sky', category: 'type' },
-  { id: 'frog', name: 'Frog', description: 'Amphibian known for its jumping.', image: 'https://cdn.pixabay.com/photo/2014/10/05/11/26/tree-frog-474949_1280.jpg', dataAiHint: 'frog pond water lily', category: 'type' },
-  { id: 'tiger', name: 'Tiger', description: 'Largest cat species.', image: 'https://cdn.pixabay.com/photo/2012/11/28/09/50/tigers-67577_1280.jpg', dataAiHint: 'tiger jungle stripes', category: 'conservation' },
-  { id: 'red-panda', name: 'Red Panda', description: 'Arboreal mammal native to Himalayas.', image: 'https://cdn.pixabay.com/photo/2022/12/05/17/49/red-panda-7637280_1280.jpg', dataAiHint: 'red panda tree bamboo', category: 'family' },
-   { id: 'dog', name: 'Domestic Dog', description: 'Commonly kept companion animal.', image: 'https://cdn.pixabay.com/photo/2020/11/17/18/20/dog-5753302_1280.jpg', dataAiHint: 'dog golden retriever pet', category: 'domesticity' },
-   { id: 'cat', name: 'Domestic Cat', description: 'Small carnivorous mammal.', image: 'https://cdn.pixabay.com/photo/2018/07/13/10/20/kittens-3535404_1280.jpg', dataAiHint: 'cat tabby pet domestic', category: 'domesticity' },
-   { id: 'polar-bear', name: 'Polar Bear', description: 'Large bear native to the Arctic.', image: 'https://cdn.pixabay.com/photo/2023/04/28/05/43/polar-bear-7955893_1280.jpg', dataAiHint: 'polar bear arctic snow', category: 'region' },
-];
+// SITE_URL for metadata
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://wildpedia.app';
 
-// --- Mock Data Fetching Function ---
-// Simulates fetching data based on category
-async function fetchAnimalsByCategory(categorySlug: string) {
-  // Simulate network delay
-  await new Promise(resolve => setTimeout(resolve, 150));
-
-  // Filter the animals based on the mock category property
-  // In a real app, you'd replace this with an API call like:
-  // const response = await fetch(`/api/animals?category=${categorySlug}`);
-  // return await response.json();
-
-  const filteredAnimals = allAnimals.filter(animal => animal.category === categorySlug);
-
-  // If no direct match, return a generic subset or empty array
-  if (filteredAnimals.length > 0) {
-    return filteredAnimals;
-  } else {
-    // Fallback: Return a slice of all animals or an empty array
-    // For demonstration, return first 3 if no match found
-    // return allAnimals.slice(0, 3);
-    return []; // Return empty if no specific data for category
-  }
-}
-
-export default function CategoryPage() {
-  const params = useParams();
-  const category = params.category as string;
-  const [animals, setAnimals] = useState<typeof allAnimals>([]);
-  const [isLoading, setIsLoading] = useState(true); // Start in loading state
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    if (category) {
-      setIsLoading(true);
-      setError(null);
-      fetchAnimalsByCategory(category)
-        .then(data => {
-          setAnimals(data);
-        })
-        .catch(err => {
-          console.error("Error fetching animals:", err);
-          setError("Failed to load animals for this category.");
-        })
-        .finally(() => {
-          setIsLoading(false);
-        });
-    } else {
-        setIsLoading(false); // No category param, stop loading
-    }
-  }, [category]); // Re-run effect when category changes
-
-  const formattedCategory = category
-    ? category.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())
+export async function generateMetadata(
+  { params }: { params: { category: string } }
+): Promise<Metadata> {
+  const categorySlug = params.category;
+  const formattedCategory = categorySlug
+    ? categorySlug.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())
     : 'Animals';
 
-  return (
-    <div className="container mx-auto py-12 px-4">
-      <Link href="/explore" className="text-sm text-muted-foreground hover:text-primary mb-4 inline-block">&larr; Back to Explore Categories</Link>
-      <h1 className="mb-8 text-4xl font-bold tracking-tight text-primary">{formattedCategory}</h1>
+  let pageTitle = `Explore Animals by ${formattedCategory} | Wildpedia`;
+  let pageDescription = `Browse and discover animals categorized under ${formattedCategory} on Wildpedia. Learn about various species within this classification.`;
+  let ogImage = `${SITE_URL}/og-default.png`; // Default OG image
+  let keywords = [formattedCategory, 'animal category', 'wildlife', 'explore species', categorySlug];
 
-      {isLoading ? (
-        <div className="flex justify-center items-center h-64">
-          <Loader2 className="h-12 w-12 animate-spin text-primary" />
-        </div>
-      ) : error ? (
-         <p className="text-center text-destructive mt-12">{error}</p>
-      ) : animals.length > 0 ? (
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-          {animals.map((animal) => (
-            <Link key={animal.id} href={`/animal/${animal.id}`} passHref>
-               <Card className="overflow-hidden hover:shadow-lg transition-shadow duration-300 cursor-pointer h-full flex flex-col bg-card hover:border-accent/50">
-                <CardHeader className="p-0">
-                 <Image
-                    src={animal.image}
-                    alt={`Image of ${animal.name}`}
-                    width={300}
-                    height={200}
-                    className="w-full h-48 object-cover"
-                    data-ai-hint={animal.dataAiHint}
-                  />
-                </CardHeader>
-                <CardContent className="p-4 flex-grow">
-                  <CardTitle className="text-xl font-semibold mb-2 text-primary">{animal.name}</CardTitle>
-                  <p className="text-sm text-muted-foreground">{animal.description}</p>
-                </CardContent>
-              </Card>
-            </Link>
-          ))}
-        </div>
-      ) : (
-        <p className="text-center text-muted-foreground mt-12">No animals found in the '{formattedCategory}' category yet.</p>
+  if (categorySlug === 'family') {
+    pageTitle = `Explore Animals by Biological Family | Wildpedia`;
+    pageDescription = `Animals are grouped into biological families based on shared evolutionary traits. Explore how lions are related to your house cat or how pandas and polar bears share a surprising ancestor. Discover animal taxonomy on Wildpedia.`;
+    ogImage = `${SITE_URL}/og-explore-family.png`; 
+    keywords = ['biological family', 'animal classification', 'taxonomy', 'species groups', 'evolutionary traits', 'animal families', formattedCategory];
+  } else if (categorySlug === 'type') {
+     pageTitle = `Explore Animals by Type | Wildpedia`;
+     pageDescription = `Discover the incredible diversity of animal life on Earth. From mammals roaming the land to marine creatures swimming in our oceans, every type plays a crucial role in nature’s balance.`;
+     ogImage = `${SITE_URL}/og-explore-type.png`; 
+     keywords = ['animal types', 'mammals', 'birds', 'reptiles', 'fish', 'insects', formattedCategory];
+  } else if (categorySlug === 'conservation') {
+     pageTitle = `Explore Animals by Conservation Status | Wildpedia`;
+     pageDescription = `Learn about animals based on their IUCN Red List status, such as Endangered, Vulnerable, or Least Concern, and understand their conservation needs.`;
+     ogImage = `${SITE_URL}/og-explore-conservation.png`;
+     keywords = ['conservation status', 'iucn red list', 'endangered species', 'vulnerable animals', formattedCategory];
+  } else if (categorySlug === 'habitat') {
+     pageTitle = `Explore Wildlife Habitats | Wildpedia`;
+     pageDescription = `Discover animals based on their natural environments like forests, oceans, deserts, grasslands, and more on Wildpedia.`;
+     ogImage = `${SITE_URL}/og-explore-habitat.png`; // Ensure public/og-explore-habitat.png exists
+     keywords = ['wildlife habitats', 'ecosystems', 'animal environments', 'forests', 'oceans', 'deserts', formattedCategory];
+  } else if (categorySlug === 'domesticity') {
+    pageTitle = `Understanding Animal Domesticity | Wildpedia`;
+    pageDescription = `Explore the distinctions between domesticated, wild, tamed, and feral animals. Learn about the process of domestication and its impact on animal behavior, genetics, and human society.`;
+    ogImage = `${SITE_URL}/og-explore-domesticity.png`; // Ensure public/og-explore-domesticity.png exists
+    keywords = ['animal domesticity', 'domesticated animals', 'wild animals', 'tamed animals', 'feral animals', 'animal behavior', 'genetics', formattedCategory];
+  } else if (categorySlug === 'region') {
+    pageTitle = `Explore Wildlife by Geographic Region: Continents & Biomes | Wildpedia`;
+    pageDescription = `Discover animals from different continents like Africa, Asia, and unique biomes such as Rainforests and Deserts. Explore global wildlife distribution patterns and ecosystems on Wildpedia.`;
+    ogImage = `${SITE_URL}/og-explore-region.png`; // Ensure public/og-explore-region.png exists
+    keywords = ['geographic regions', 'continents', 'biomes', 'animal distribution', 'biogeography', 'ecosystems', 'continental wildlife', 'regional species', 'explore by map', formattedCategory];
+  }
+
+
+  return {
+    title: pageTitle,
+    description: pageDescription,
+    keywords: keywords,
+    openGraph: {
+      title: pageTitle,
+      description: pageDescription,
+      url: `${SITE_URL}/explore/${categorySlug}`,
+      type: 'website',
+      images: [{ url: ogImage, alt: `Wildpedia - Explore by ${formattedCategory}` }],
+    },
+    twitter: {
+      card: 'summary_large_image', 
+      title: pageTitle,
+      description: pageDescription,
+      images: [ogImage], 
+    },
+  };
+}
+
+// This is now a Server Component
+export default function CategoryPageServer({ params }: { params: { category: string } }) {
+  const { category } = params;
+  let pageJsonLd: object | null = null;
+
+  if (category === 'region') {
+    const pageTitle = `Explore Wildlife by Geographic Region: Continents & Biomes | Wildpedia`;
+    const pageDescription = `Discover animals from different continents like Africa, Asia, and unique biomes such as Rainforests and Deserts. Explore global wildlife distribution patterns and ecosystems on Wildpedia.`;
+    pageJsonLd = {
+      "@context": "https://schema.org",
+      "@type": "CollectionPage",
+      "name": pageTitle,
+      "description": pageDescription,
+      "url": `${SITE_URL}/explore/region`,
+      "publisher": {
+        "@type": "Organization",
+        "name": "Wildpedia",
+        "logo": {
+          "@type": "ImageObject",
+          "url": `${SITE_URL}/logo.png`
+        }
+      },
+      "mainEntity": {
+        "@type": "ItemList",
+        "itemListElement": [
+          ...continentData.map((continent, index) => ({
+            "@type": "ListItem",
+            "position": index + 1,
+            "item": {
+              "@type": "WebPage", // Could also be Place, but WebPage is safer here for list items
+              "name": continent.name,
+              "description": continent.introduction.substring(0, 100) + "...", // Short description
+              "url": `${SITE_URL}/explore/region/${continent.id}`
+            }
+          })),
+          ...subregionData.map((subregion, index) => ({
+            "@type": "ListItem",
+            "position": continentData.length + index + 1,
+            "item": {
+              "@type": "WebPage",
+              "name": subregion.name,
+              "description": subregion.introduction.substring(0, 100) + "...", // Short description
+              "url": `${SITE_URL}/explore/region/${subregion.id}`
+            }
+          }))
+        ]
+      }
+    };
+  } else if (category === 'family') {
+     pageJsonLd = {
+        "@context": "https://schema.org",
+        "@type": "CollectionPage",
+        "name": "Explore Animals by Biological Family | Wildpedia",
+        "description": "Discover animals grouped by their scientific families, revealing evolutionary relationships and shared traits.",
+        "url": `${SITE_URL}/explore/family`,
+        "publisher": {
+            "@type": "Organization",
+            "name": "Wildpedia"
+        }
+        // Individual families can be listed as itemListElement if familyData is imported here
+     }
+  }
+
+
+  return (
+    <>
+      {pageJsonLd && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(pageJsonLd) }}
+        />
       )}
-    </div>
+      <CategoryView category={category} />
+    </>
   );
 }
+

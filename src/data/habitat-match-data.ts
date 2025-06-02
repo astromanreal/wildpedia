@@ -1,3 +1,4 @@
+
 /**
  * @fileOverview Mock data for the Habitat Match Game.
  */
@@ -21,26 +22,26 @@ export const habitats: Habitat[] = [
   {
     id: 'savanna',
     name: 'African Savanna',
-    image: 'https://picsum.photos/seed/savanna-habitat/300/200',
-    dataAiHint: 'african savanna landscape sunset',
+    image: 'https://placehold.co/300x200.png?text=Savanna',
+    dataAiHint: 'african savanna landscape sunset game',
   },
   {
     id: 'arctic',
     name: 'Arctic Tundra',
-    image: 'https://picsum.photos/seed/arctic-habitat/300/200',
-    dataAiHint: 'arctic tundra snow ice winter',
+    image: 'https://placehold.co/300x200.png?text=Arctic',
+    dataAiHint: 'arctic tundra snow ice winter game',
   },
   {
     id: 'rainforest',
     name: 'Amazon Rainforest',
-    image: 'https://picsum.photos/seed/rainforest-habitat/300/200',
-    dataAiHint: 'amazon rainforest dense jungle river',
+    image: 'https://placehold.co/300x200.png?text=Rainforest',
+    dataAiHint: 'amazon rainforest dense jungle river game',
   },
    {
     id: 'ocean',
     name: 'Coral Reef',
-    image: 'https://picsum.photos/seed/ocean-habitat/300/200',
-    dataAiHint: 'coral reef underwater fish ocean',
+    image: 'https://placehold.co/300x200.png?text=Coral+Reef',
+    dataAiHint: 'coral reef underwater fish ocean game',
   },
 ];
 
@@ -48,57 +49,57 @@ export const animals: Animal[] = [
   {
     id: 'lion',
     name: 'Lion',
-    image: 'https://picsum.photos/seed/lion-animal/100/100',
+    image: 'https://placehold.co/100x100.png?text=Lion',
     correctHabitatId: 'savanna',
-    dataAiHint: 'lion face close up',
+    dataAiHint: 'lion face close up game',
   },
   {
     id: 'polar-bear',
     name: 'Polar Bear',
-    image: 'https://picsum.photos/seed/polar-bear-animal/100/100',
+    image: 'https://placehold.co/100x100.png?text=Polar+Bear',
     correctHabitatId: 'arctic',
-    dataAiHint: 'polar bear snow walking',
+    dataAiHint: 'polar bear snow walking game',
   },
   {
     id: 'toucan',
     name: 'Toucan',
-    image: 'https://picsum.photos/seed/toucan-animal/100/100',
+    image: 'https://placehold.co/100x100.png?text=Toucan',
     correctHabitatId: 'rainforest',
-    dataAiHint: 'toucan colorful beak profile',
+    dataAiHint: 'toucan colorful beak profile game',
   },
   {
     id: 'clownfish',
     name: 'Clownfish',
-    image: 'https://picsum.photos/seed/clownfish-animal/100/100',
+    image: 'https://placehold.co/100x100.png?text=Clownfish',
     correctHabitatId: 'ocean',
-     dataAiHint: 'clownfish sea anemone underwater',
+     dataAiHint: 'clownfish sea anemone underwater game',
   },
     {
     id: 'zebra',
     name: 'Zebra',
-    image: 'https://picsum.photos/seed/zebra-animal/100/100',
+    image: 'https://placehold.co/100x100.png?text=Zebra',
     correctHabitatId: 'savanna',
-    dataAiHint: 'zebra stripes profile',
+    dataAiHint: 'zebra stripes profile game',
     },
     {
     id: 'arctic-fox',
     name: 'Arctic Fox',
-    image: 'https://picsum.photos/seed/arctic-fox-animal/100/100',
+    image: 'https://placehold.co/100x100.png?text=Arctic+Fox',
     correctHabitatId: 'arctic',
-    dataAiHint: 'arctic fox white fur snow',
+    dataAiHint: 'arctic fox white fur snow game',
     },
     {
     id: 'monkey',
     name: 'Howler Monkey',
-    image: 'https://picsum.photos/seed/monkey-animal/100/100',
+    image: 'https://placehold.co/100x100.png?text=Howler+Monkey',
     correctHabitatId: 'rainforest',
-    dataAiHint: 'howler monkey tree branch jungle',
+    dataAiHint: 'howler monkey tree branch jungle game',
    },
     {
     id: 'sea-turtle',
     name: 'Sea Turtle',
-    image: 'https://picsum.photos/seed/sea-turtle-animal/100/100',
+    image: 'https://placehold.co/100x100.png?text=Sea+Turtle',
     correctHabitatId: 'ocean',
-    dataAiHint: 'sea turtle swimming underwater ocean',
+    dataAiHint: 'sea turtle swimming underwater ocean game',
     },
 ];

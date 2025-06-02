@@ -1,14 +1,15 @@
+
 import Link from 'next/link';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Mountain, MapPinned, PawPrint, Dna, HeartHandshake, Globe, Home } from 'lucide-react'; // Nature/category icons
+import { Mountain, PawPrint, Dna, HeartHandshake, Globe, Home } from 'lucide-react'; // Nature/category icons
 
 const categories = [
-  { name: 'Habitat', icon: Mountain, slug: 'habitat', description: 'Animals by their environment' },
-  { name: 'Biological Family', icon: Dna, slug: 'family', description: 'Grouped by scientific families' },
-  { name: 'Animal Type', icon: PawPrint, slug: 'type', description: 'Mammals, Birds, Fish, etc.' },
-  { name: 'Conservation Status', icon: HeartHandshake, slug: 'conservation', description: 'Endangered, Vulnerable, etc.' },
-   { name: 'Domesticity', icon: Home, slug: 'domesticity', description: 'Kept by humans or living free' }, // Updated name
-  { name: 'Geographic Region', icon: Globe, slug: 'region', description: 'Animals by continent or area' },
+  { name: 'Explore by Habitat', icon: Mountain, slug: 'habitat', description: 'Discover animals based on their natural environments like forests, oceans, or deserts.' },
+  { name: 'Explore by Animal Type', icon: PawPrint, slug: 'type', description: 'Browse species by their biological classification such as mammals, birds, reptiles, etc.' },
+  { name: 'Explore by Conservation Status', icon: HeartHandshake, slug: 'conservation', description: 'Learn about animals based on their IUCN Red List status (e.g., Endangered, Vulnerable).' },
+  { name: 'Explore by Biological Family', icon: Dna, slug: 'family', description: 'Group animals by their scientific families to see related species.' },
+  { name: 'Explore by Domesticity', icon: Home, slug: 'domesticity', description: 'Differentiate between animals kept by humans and those living freely in the wild.' },
+  { name: 'Explore by Geographic Region', icon: Globe, slug: 'region', description: 'Find animals based on the continent or specific geographic area they inhabit.' },
 ];
 
 // Renamed component to avoid conflict if ExplorePage is used elsewhere
@@ -39,11 +40,6 @@ export default function ExploreCategoriesPage() {
           </Link>
         ))}
       </div>
-       {/* Placeholder for future Search and Filter component */}
-      {/* <div className="mt-16">
-        <h2 className="text-2xl font-semibold mb-4 text-center">Search & Filter</h2>
-        <p className="text-center text-muted-foreground">Coming soon: Powerful tools to find specific animals.</p>
-      </div> */}
     </div>
   );
 }

@@ -1,8 +1,30 @@
+
+import type { Metadata } from 'next';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { BrainCircuit, Puzzle, Trophy, Footprints, Star, Award, BarChart } from 'lucide-react'; // Added Star, Award, BarChart
+import { BrainCircuit, Puzzle, Trophy, Footprints, Star, Award, BarChart, ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
-import LeaderboardDisplay from '@/components/games/leaderboard-display'; // Import Leaderboard component
-import { mockLeaderboardData } from '@/data/leaderboard-data'; // Import mock data
+import LeaderboardDisplay from '@/components/games/leaderboard-display';
+import { mockLeaderboardData } from '@/data/leaderboard-data';
+
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://wildpedia.app';
+
+export const metadata: Metadata = {
+  title: 'Wildlife Games & Quizzes - Test Your Knowledge',
+  description: 'Play engaging games and quizzes about animals, habitats, and conservation on Wildpedia. Challenge yourself, earn points, and climb the leaderboard!',
+  keywords: ['wildlife games', 'animal quizzes', 'conservation games', 'nature trivia', 'educational games', 'fun learning'],
+  openGraph: {
+    title: 'Wildlife Games & Quizzes | Wildpedia',
+    description: 'Challenge your knowledge with fun and educational wildlife games on Wildpedia.',
+    url: `${SITE_URL}/games`,
+    images: [{ url: `${SITE_URL}/og-games.png`, alt: 'Wildpedia Games & Quizzes' }], // Create public/og-games.png
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Wildlife Games & Quizzes | Wildpedia',
+    description: 'Challenge your knowledge with fun and educational wildlife games on Wildpedia.',
+    images: [`${SITE_URL}/twitter-games.png`], // Create public/twitter-games.png
+  },
+};
 
 const games = [
   {
@@ -12,7 +34,7 @@ const games = [
     link: '/games/animal-id-quiz',
     bgColor: 'bg-gradient-to-br from-blue-100 to-blue-200 dark:from-blue-900 dark:to-blue-950',
     borderColor: 'border-blue-300 dark:border-blue-700',
-    userLevel: 'Beginner', // Placeholder user level
+    userLevel: 'Beginner',
   },
   {
     title: 'Habitat Match Game',
@@ -21,7 +43,7 @@ const games = [
     link: '/games/habitat-match',
      bgColor: 'bg-gradient-to-br from-green-100 to-green-200 dark:from-green-900 dark:to-green-950',
      borderColor: 'border-green-300 dark:border-green-700',
-     userLevel: 'Explorer', // Placeholder user level
+     userLevel: 'Explorer',
   },
   {
     title: 'Conservation Challenge',
@@ -30,22 +52,44 @@ const games = [
     link: '/games/conservation-challenge',
      bgColor: 'bg-gradient-to-br from-yellow-100 to-yellow-200 dark:from-yellow-900 dark:to-yellow-950',
      borderColor: 'border-yellow-300 dark:border-yellow-700',
-     userLevel: 'Beginner', // Placeholder user level
+     userLevel: 'Beginner',
   },
   {
     title: 'Migration Maze',
     description: 'Help animals navigate their migration routes.',
-    icon: Footprints, // New icon
-    link: '/games/migration-maze', // Updated link
+    icon: Footprints,
+    link: '/games/migration-maze',
     bgColor: 'bg-gradient-to-br from-orange-100 to-orange-200 dark:from-orange-900 dark:to-orange-950',
     borderColor: 'border-orange-300 dark:border-orange-700',
-    userLevel: 'Expert', // Placeholder user level
+    userLevel: 'Expert',
   },
 ];
 
 export default function GamesPage() {
+  const gamesPageJsonLd = {
+      "@context": "https://schema.org",
+      "@type": "CollectionPage", // Appropriate for a list of games
+      "name": "Wildpedia Games & Quizzes",
+      "description": "A collection of fun and educational games about wildlife and conservation.",
+      "url": `${SITE_URL}/games`,
+      "publisher": {
+        "@type": "Organization",
+        "name": "Wildpedia"
+      },
+      "hasPart": games.map(game => ({ // Listing some of the games
+        "@type": "Game",
+        "name": game.title,
+        "description": game.description,
+        "url": `${SITE_URL}${game.link}`,
+        "gamePlatform": "WebBrowser"
+      }))
+    };
   return (
     <div className="container mx-auto py-12 px-4 perspective-1000">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(gamesPageJsonLd) }}
+      />
       <h1 className="mb-4 text-4xl font-bold tracking-tight text-center text-primary">
         Games & Quizzes
       </h1>
@@ -53,8 +97,7 @@ export default function GamesPage() {
         Challenge yourself and learn more about the amazing world of wildlife! Earn points, level up, and climb the leaderboard.
       </p>
 
-      {/* Games Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16"> {/* Added mb-16 */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
         {games.map((game) => (
           <Link key={game.title} href={game.link} passHref>
             <Card className={`
@@ -70,25 +113,20 @@ export default function GamesPage() {
                  </div>
                 <game.icon className="h-8 w-8 text-accent shrink-0" />
               </CardHeader>
-              <CardContent className="flex-grow flex flex-col justify-between"> {/* Use flex-col */}
+              <CardContent className="flex-grow flex flex-col justify-between">
                 <p className="text-sm text-muted-foreground mb-4">{game.description}</p>
-                {/* User Level/Progress Indicator */}
                 <div className="mt-auto pt-4 border-t border-current/20">
                   <p className="text-xs text-muted-foreground flex items-center gap-1">
                      <Star className="h-3 w-3 text-yellow-500" /> Your Level: <span className="font-semibold text-primary">{game.userLevel}</span>
                   </p>
-                   {/* Add High Score or Progress bar here later */}
-                  {/* <p className="text-xs text-muted-foreground mt-1">High Score: 0</p> */}
                 </div>
               </CardContent>
-              {/* Subtle 3D effect on hover */}
                <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 backface-hidden"></div>
             </Card>
           </Link>
         ))}
       </div>
 
-      {/* Leaderboard Section */}
       <div className="mt-16">
         <h2 className="text-3xl font-bold mb-6 text-center text-primary flex items-center justify-center gap-2">
           <BarChart className="h-8 w-8 text-accent"/> Leaderboard
@@ -96,12 +134,13 @@ export default function GamesPage() {
         <LeaderboardDisplay leaderboardData={mockLeaderboardData} />
       </div>
 
-      {/* Back Link */}
        <div className="mt-12 text-center">
-            <Link href="/" className="text-sm text-muted-foreground hover:text-primary">
-                &larr; Back to Explore
+            <Link href="/" className="text-sm text-muted-foreground hover:text-primary inline-flex items-center gap-1">
+                <ArrowLeft className="h-4 w-4" /> Back to Home
             </Link>
         </div>
     </div>
   );
 }
+
+    

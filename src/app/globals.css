@@ -8,6 +8,39 @@ body {
   font-family: 'Inter', sans-serif; /* Using Inter for a clean, modern look */
 }
 
+/* Implemented functional font size classes */
+.font-size-small {
+  font-size: 0.875rem; /* Equivalent to text-sm */
+}
+.font-size-small h1 { font-size: 1.875rem; } /* text-xl */
+.font-size-small h2 { font-size: 1.5rem; } /* text-lg */
+.font-size-small h3 { font-size: 1.25rem; } /* text-base */
+.font-size-small p, .font-size-small span, .font-size-small div { font-size: 0.875rem; } /* Ensure paragraphs and spans also scale */
+.font-size-small button { font-size: 0.875rem; }
+.font-size-small input, .font-size-small select, .font-size-small textarea { font-size: 0.875rem; }
+
+
+.font-size-normal {
+  font-size: 1rem; /* Equivalent to text-base */
+}
+.font-size-normal h1 { font-size: 2.25rem; } /* text-2xl */
+.font-size-normal h2 { font-size: 1.875rem; } /* text-xl */
+.font-size-normal h3 { font-size: 1.5rem; } /* text-lg */
+.font-size-normal p, .font-size-normal span, .font-size-normal div { font-size: 1rem; }
+.font-size-normal button { font-size: 1rem; }
+.font-size-normal input, .font-size-normal select, .font-size-normal textarea { font-size: 1rem; }
+
+.font-size-large {
+  font-size: 1.125rem; /* Equivalent to text-lg */
+}
+.font-size-large h1 { font-size: 2.5rem; } /* larger than text-2xl */
+.font-size-large h2 { font-size: 2rem; } /* larger than text-xl */
+.font-size-large h3 { font-size: 1.75rem; } /* larger than text-lg */
+.font-size-large p, .font-size-large span, .font-size-large div { font-size: 1.125rem; }
+.font-size-large button { font-size: 1.125rem; }
+.font-size-large input, .font-size-large select, .font-size-large textarea { font-size: 1.125rem; }
+
+
 @layer base {
   :root {
     /* Default Theme (Green/Terracotta) Variables */

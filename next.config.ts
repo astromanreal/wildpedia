@@ -1,7 +1,7 @@
-import type {NextConfig} from 'next';
+
+import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
-  /* config options here */
   typescript: {
     ignoreBuildErrors: true,
   },
@@ -22,18 +22,30 @@ const nextConfig: NextConfig = {
         port: '',
         pathname: '/**',
       },
-      { // Added Pixabay hostname
+      {
         protocol: 'https',
         hostname: 'cdn.pixabay.com',
         port: '',
         pathname: '/**',
       },
-      { // Added extinctanimals.org hostname
+      {
         protocol: 'https',
         hostname: 'www.extinctanimals.org',
         port: '',
         pathname: '/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'placehold.co',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'i.pinimg.com',
+        port: '',
+        pathname: '/**',
+      }
     ],
   },
 };
