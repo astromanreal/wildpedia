@@ -28,19 +28,23 @@ export const siteMetadata: Metadata = {
   },
   description: 'Wildpedia is your ultimate guide to the animal kingdom. Discover comprehensive information on species, wildlife habitats, conservation efforts, interactive games, and fascinating facts about creatures great and small from across the globe.',
   keywords: ['wildlife encyclopedia', 'animal facts', 'species information', 'habitats', 'conservation', 'biodiversity', 'nature guide', 'explore animals', 'wildpedia'],
-  authors: [{ name: 'Wildpedia Team', url: `${APP_URL}/contact` }], // Use APP_URL for dynamic links
+  authors: [{ name: 'Wildpedia Team', url: `${APP_URL}/contact` }],
   creator: 'Wildpedia Team',
   publisher: 'Wildpedia',
+  verification: { // Handles google-site-verification and other verifications
+    google: 'mac7aLjz9hgBPOeatEJp8fZ6RL2GRi8PeWQfgcITzFU',
+    // Add other verification services here if needed, e.g., yandex, bing, etc.
+  },
   openGraph: {
     type: 'website',
     locale: 'en_US',
-    url: CANONICAL_URL, // Use CANONICAL_URL for OG URL
+    url: CANONICAL_URL,
     siteName: 'Wildpedia',
     title: 'Wildpedia - Explore the Animal Kingdom, Habitats & Conservation',
     description: 'Your ultimate guide to the animal kingdom. Discover facts, images, and conservation status of diverse species.',
     images: [
       {
-        url: `${CANONICAL_URL}/og-default.png`,
+        url: `${CANONICAL_URL}/og-default.png`, // Ensure /public/og-default.png exists
         width: 1200,
         height: 630,
         alt: 'Wildpedia - Explore the Animal Kingdom',
@@ -51,7 +55,9 @@ export const siteMetadata: Metadata = {
     card: 'summary_large_image',
     title: 'Wildpedia - Explore the Animal Kingdom, Habitats & Conservation',
     description: 'Your ultimate guide to the animal kingdom. Discover facts, images, and conservation status of diverse species.',
-    images: [`${CANONICAL_URL}/twitter-default.png`],
+    images: [`${CANONICAL_URL}/twitter-default.png`], // Ensure /public/twitter-default.png exists
+    // site: '@yourTwitterHandle', // Optional: Your site's Twitter handle
+    // creator: '@creatorTwitterHandle', // Optional: Content creator's Twitter handle
   },
   robots: {
     index: true,
@@ -65,13 +71,25 @@ export const siteMetadata: Metadata = {
     },
   },
   icons: {
-    icon: '/favicon.ico',
-    shortcut: '/favicon-16x16.png',
-    apple: '/apple-touch-icon.png',
+    icon: '/favicon.ico', // Main favicon
+    shortcut: '/favicon-16x16.png', // For older browsers
+    apple: '/apple-touch-icon.png', // For iOS home screen
+    // You can add more sizes or types if needed:
+    // other: [
+    //   { rel: 'icon', url: '/favicon-32x32.png', sizes: '32x32' },
+    //   { rel: 'icon', url: '/favicon.svg', type: 'image/svg+xml' },
+    // ],
   },
-  manifest: `${APP_URL}/site.webmanifest`, // Can use APP_URL if manifest needs to be environment aware
+  manifest: `${APP_URL}/site.webmanifest`,
   alternates: {
-    canonical: CANONICAL_URL, // Main canonical URL for the site
+    canonical: CANONICAL_URL,
+    // languages: {
+    //   'en-US': '/',
+    //   // 'es-ES': '/es', // If you add translations
+    // },
+    // types: { // If you offer different content types, e.g., RSS feed
+    //   'application/rss+xml': `${APP_URL}/rss.xml`,
+    // },
   },
 };
 
@@ -79,13 +97,13 @@ const websiteJsonLd = {
   "@context": "https://schema.org",
   "@type": "WebSite",
   "name": "Wildpedia",
-  "url": CANONICAL_URL, // Use fixed CANONICAL_URL
+  "url": CANONICAL_URL,
   "description": "Wildpedia is your ultimate guide to the animal kingdom. Discover comprehensive information on species, wildlife habitats, conservation efforts, interactive games, and fascinating facts about creatures great and small from across the globe.",
   "potentialAction": {
     "@type": "SearchAction",
     "target": {
       "@type": "EntryPoint",
-      "urlTemplate": `${CANONICAL_URL}/search?q={search_term_string}` // Use fixed CANONICAL_URL
+      "urlTemplate": `${CANONICAL_URL}/search?q={search_term_string}`
     },
     "query-input": "required name=search_term_string"
   },
@@ -94,7 +112,7 @@ const websiteJsonLd = {
     "name": "Wildpedia",
     "logo": {
       "@type": "ImageObject",
-      "url": `${CANONICAL_URL}/logo.png` // Use fixed CANONICAL_URL
+      "url": `${CANONICAL_URL}/logo.png` // Ensure /public/logo.png exists
     }
   },
   "inLanguage": "en-US"
@@ -115,7 +133,6 @@ export default function RootLayout({
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
         <link rel="manifest" href="/site.webmanifest" />
         <script
-<meta name="google-site-verification" content="mac7aLjz9hgBPOeatEJp8fZ6RL2GRi8PeWQfgcITzFU" />
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
         />

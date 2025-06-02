@@ -8,7 +8,9 @@ import HabitatMatchGame from '@/components/games/habitat-match-game';
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://wildpedia.app';
 
-export const metadata: Metadata = { // Static metadata for the page
+// Removed export from metadata object as Client Components cannot export static metadata.
+// The title for this page will be inherited or can be set dynamically using document.title.
+const pageMetadata: Metadata = {
   title: 'Habitat Match Game - Connect Animals to Their Homes',
   description: 'Play the Habitat Match Game on Wildpedia! Drag and drop animals to their correct natural habitats and learn about different ecosystems.',
   keywords: ['habitat game', 'animal matching game', 'ecosystem quiz', 'learn habitats', 'wildlife education game'],

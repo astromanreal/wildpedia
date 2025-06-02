@@ -1,3 +1,6 @@
+
+'use client';
+
 import type { Metadata } from 'next';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import Link from 'next/link';
@@ -6,7 +9,9 @@ import ConservationChallenge from '@/components/games/conservation-challenge';
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://wildpedia.app';
 
-export const metadata: Metadata = {
+// Removed export from metadata object as Client Components cannot export static metadata.
+// The title for this page will be inherited or can be set dynamically using document.title.
+const pageMetadata: Metadata = {
   title: 'Conservation Challenge Quiz - Test Your Eco-Knowledge',
   description: 'Take the Conservation Challenge on Wildpedia! Answer trivia questions about wildlife conservation, endangered species, and environmental efforts.',
   keywords: ['conservation quiz', 'wildlife challenge', 'environmental trivia', 'endangered species game', 'eco knowledge'],

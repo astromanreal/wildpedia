@@ -9,9 +9,9 @@ import AnimalIdQuiz from '@/components/games/animal-id-quiz';
 // Although this is a client component, metadata can be defined for initial load / SSR
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://wildpedia.app';
 
-// Static metadata for this page.
-// If you needed dynamic data (e.g. quiz name from a DB), you'd use generateMetadata.
-export const metadata: Metadata = {
+// Removed export from metadata object as Client Components cannot export static metadata.
+// The title for this page will be inherited or can be set dynamically using document.title.
+const pageMetadata: Metadata = {
   title: 'Animal Identification Quiz - Test Your Wildlife Knowledge',
   description: 'Play the Animal Identification Quiz on Wildpedia! Recognize different species from images or descriptions and see how much you know about the animal kingdom.',
   keywords: ['animal quiz', 'identification game', 'wildlife trivia', 'species quiz', 'learn animals'],

@@ -8,7 +8,9 @@ import MigrationMazeGame from '@/components/games/migration-maze';
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://wildpedia.app';
 
-export const metadata: Metadata = { // Static metadata for the page
+// Removed export from metadata object as Client Components cannot export static metadata.
+// The title for this page will be inherited or can be set dynamically using document.title.
+const pageMetadata: Metadata = {
   title: 'Migration Maze Game - Guide Animals on Their Journeys',
   description: 'Play the Migration Maze game on Wildpedia! Help animals navigate challenging mazes representing their migration routes. Avoid obstacles and reach the destination safely.',
   keywords: ['migration game', 'animal maze', 'maze game', 'wildlife journey', 'educational game animals'],
